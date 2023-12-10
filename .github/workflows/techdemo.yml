@@ -1,0 +1,40 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main  # or the branch you want to trigger the workflow
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build
+
+      - name: Test
+        run: npm test
+
+      - name: Deploy
+        # Define your deployment steps here
+        # This could involve deploying to a hosting service like Netlify, Vercel, or GitHub Pages
+        # For example, to deploy to GitHub Pages:
+        run: |
+          git config --global user.email "philipthomaspattettu@gmail.com"
+          git config --global user.name "philip-git-07"
+          npm install -g gh-pages
+          npm run build
+          echo "your-domain.com" > ./build/CNAME
+          gh-pages -d build -b main -t true
